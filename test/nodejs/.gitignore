@@ -1,0 +1,20 @@
+# Node
+node_modules/
+npm-debug.log
+npm-debug.log.*
+
+# Code Coverage (isparta)
+/coverage/
+
+# Other
+/.jsbeautifyrc
+
+# Typescript Output
+dist/
+/.nyc_output/
+
+# Docker build output
+/*.tar
+
+# Shared files
+/shared/
