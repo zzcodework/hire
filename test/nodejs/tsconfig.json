@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "outDir": "dist",
+        "module": "commonjs",
+        "declaration": true,
+        "forceConsistentCasingInFileNames": true,
+        "experimentalDecorators": true
+    }
+}
