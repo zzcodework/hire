@@ -6,8 +6,7 @@
   "scripts": {
     "build": "tsc",
     "start": "npm run build && node ./dist/start.js",
-    "test": "npm run build && node ./dist/test.js",
-    "arm": "npm run build && node ./dist/arm.js"
+    "test": "npm run build && node ./dist/test.js"
   },
   "author": "",
   "license": "ISC",
