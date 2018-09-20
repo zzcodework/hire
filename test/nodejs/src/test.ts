@@ -19,7 +19,7 @@ let dogA = new Dog(2);
 console.log(dogA);
 
 // console.log(Object.assign(catA, dogA));
-console.log(Object.assign(dogA, catA));
+console.log(Object.assign(dogA, catA, { name: 'bird' }));
 
 
 
