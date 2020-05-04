@@ -4,10 +4,18 @@
   "description": "Something to do with wechat friends",
   "main": "index.js",
   "scripts": {
+    "lint": "tslint --fix --project tsconfig.json",
+    "clean": "rimraf ./dist",
+    "prebuild": "npm run clean && npm run lint ",
     "build": "tsc",
-    "start": "npm run build && node ./dist/start.js",
-    "test": "npm run build && node ./dist/test.js"
+    "start": "npm run build && node ./dist/start.js"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "zz",
+  "license": "ISC",
+  "devDependencies": {
+    "rimraf": "^3.0.2",
+    "tsconfig": "^7.0.0",
+    "tslint": "^6.1.2",
+    "typescript": "^3.8.3"
+  }
 }
