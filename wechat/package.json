@@ -13,9 +13,14 @@
   "author": "zz",
   "license": "ISC",
   "devDependencies": {
+    "@types/node": "^13.13.5",
+    "@types/request": "^2.48.4",
     "rimraf": "^3.0.2",
     "tsconfig": "^7.0.0",
     "tslint": "^6.1.2",
     "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "request": "^2.88.2"
   }
 }
