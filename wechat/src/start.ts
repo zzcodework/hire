@@ -1,23 +1,25 @@
 import { getAccessToken } from './login';
-import { TokenResponse, Users } from './types';
 import { listUsers } from './users';
 
 const appId = 'wx40f8c75254235242';
 const appSecret = '';
+let accessToken = '';
 
 async function main() {
     console.log('Start');
     console.log('#'.repeat(100));
 
-    let accessToken = '';
     if (!accessToken) {
-        const tokenResponse: TokenResponse = await getAccessToken(appId, appSecret);
+        const tokenResponse = await getAccessToken(appId, appSecret);
         accessToken = tokenResponse.access_token;
     }
     console.log(accessToken);
 
-    const users: Users = await listUsers(accessToken);
-    console.log(users);
+    const users = await listUsers(accessToken);
+    if (users.data) {
+        console.log(users.total);
+        users.data.openid.forEach(u => console.log(u));
+    }
 }
 
 main()

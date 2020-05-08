@@ -6,5 +6,8 @@ export interface TokenResponse {
 export interface Users {
     total: number;
     count: number;
+    data?: {
+        openid: string[];
+    };
     next_openid: string;
 }
