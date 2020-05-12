@@ -8,11 +8,13 @@
     "clean": "rimraf ./dist",
     "prebuild": "npm run clean && npm run lint ",
     "build": "tsc",
-    "start": "npm run build && node ./dist/start.js"
+    "start": "npm run build && node ./dist/start.js",
+    "api": "npm run build && node ./dist/api.js"
   },
   "author": "zz",
   "license": "ISC",
   "devDependencies": {
+    "@types/express": "^4.17.6",
     "@types/node": "^13.13.5",
     "@types/request": "^2.48.4",
     "rimraf": "^3.0.2",
@@ -21,6 +23,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
+    "express": "^4.17.1",
     "request": "^2.88.2"
   }
 }
