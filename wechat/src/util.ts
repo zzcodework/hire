@@ -6,7 +6,6 @@ export async function fetchResult<T>(url: string, options: request.CoreOptions):
             if (err) {
                 reject(err);
             }
-            // console.log(res);
             resolve(JSON.parse(body));
         });
     });

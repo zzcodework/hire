@@ -11,3 +11,9 @@ export interface Users {
     };
     next_openid: string;
 }
+
+export interface AppIdentity {
+    appId: string;
+    appSecret: string;
+    appCode?: string;
+}
