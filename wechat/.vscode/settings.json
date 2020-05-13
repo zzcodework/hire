@@ -1,0 +1,8 @@
+{
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/6f4bd109-9efb-46c7-8fe8-4750d5256f98/resourceGroups/wechat/providers/Microsoft.Web/sites/wechatmeet",
+    "appService.deploySubpath": ""
+}
