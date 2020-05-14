@@ -8,8 +8,9 @@
     "clean": "rimraf ./dist",
     "prebuild": "npm run clean && npm run lint ",
     "build": "tsc",
-    "start": "npm run build && node ./dist/start.js",
-    "api": "npm run build && node ./dist/api.js"
+    "wechat": "npm run build && node ./dist/start.js",
+    "api": "npm run build && node ./dist/api.js",
+    "start": "node ./dist/api.js"
   },
   "author": "zz",
   "license": "ISC",
