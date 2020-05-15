@@ -1,43 +1,25 @@
-import { fetchResult } from '../util';
-import { AppIdentity } from '../types';
-import { appId, appSecret } from '../constant';
-import * as express from 'express';
+import { fetchResult } from '../common/util';
+import { TokenResponse } from '../common/types';
+import { appId, appSecret } from '../common/constant';
 
-export async function getToken(req: express.Request, res: express.Response) {
-    try {
-        const identity: AppIdentity = {
-            appId: appId,
-            appSecret: appSecret,
-            appCode: req.query.code as string
-        };
-        const result = await getAuthorizationCode(identity);
-        res.status(200).json(result);
-    } catch (e) {
-        const error = {
-            code: 400,
-            message: e.message
-        };
-        res.status(400).json({ error });
+export async function renewAccessToken(token: TokenResponse): Promise<TokenResponse> {
+    const now = new Date().getTime();
+    const delta = 60 * 1000;
+    if (token == null
+        || token.access_token === ''
+        || token.expires_in - now < delta) {
+        token = await getAccessToken();
     }
+    return token;
 }
 
-async function getAuthorizationCode(identity: AppIdentity): Promise<string> {
-    if (identity.appCode == null) {
-        throw new Error('appCode is null');
-    }
-    if (identity.appId == null) {
-        throw new Error('appId is null');
-    }
-    if (identity.appSecret == null) {
-        throw new Error('appSecret is null');
-    }
-
-    const url = `https://api.weixin.qq.com/sns/jscode2session?appid=${identity.appId}&secret=${identity.appSecret}&js_code=${identity.appCode}&grant_type=authorization_code`;
+async function getAccessToken(): Promise<TokenResponse> {
+    const url = `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${appId}&secret=${appSecret}`;
     const options = {
         headers: {
             'content-type': 'application/json'
         },
         method: 'GET'
     };
-    return await fetchResult<string>(url, options);
+    return await fetchResult<TokenResponse>(url, options);
 }
