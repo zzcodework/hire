@@ -17,3 +17,14 @@ export interface AppIdentity {
     appSecret: string;
     appCode?: string;
 }
+
+export interface Device {
+    id: string;
+    approved: boolean;
+    description?: string;
+    displayName?: string;
+    instanceOf: string;
+    simulated: boolean;
+    provisioned?: boolean;
+    etag?: string;
+}
