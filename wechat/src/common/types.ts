@@ -28,3 +28,10 @@ export interface Device {
     provisioned?: boolean;
     etag?: string;
 }
+
+export interface Application {
+    id: string;
+    host?: string;
+    subdomain: string;
+    displayName: string;
+}

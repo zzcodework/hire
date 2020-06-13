@@ -1,4 +1,5 @@
 import * as express from 'express';
+import * as shortid from 'shortid';
 import { Client } from 'azure-iot-device';
 import { Mqtt as IoTHubMqtt } from 'azure-iot-device-mqtt';
 import { ProvisioningDeviceClient } from 'azure-iot-provisioning-device';
@@ -6,33 +7,27 @@ import { SymmetricKeySecurityClient } from 'azure-iot-security-symmetric-key';
 import { Mqtt as DPSMqtt } from 'azure-iot-provisioning-device-mqtt';
 import { fetchResult } from '../common/util';
 import { Device } from '../common/types';
-
-const host = 'global.azure-devices-provisioning.net';
-// const deviceId = 'zz-web';
+import { key, host, scopeId, token } from '../common/constant';
 
 export async function createDevice(req: express.Request, res: express.Response) {
     try {
-        const testDevice = await getDevice('phone-sim-1');
-        console.log(testDevice);
-
-        const deviceId = req.query.id as string || Date.now().toString();
-        const simDeviceId = `${deviceId}_sim`;
+        const deviceId = req.query.id as string || shortid.generate();
         const simDevice: Device = {
-            id: simDeviceId,
-            displayName: simDeviceId,
-            description: `${simDeviceId} simulation`,
-            instanceOf: 'urn:wechat:Phone_7c1:1',
+            id: deviceId,
+            displayName: `${deviceId}-sim`,
+            description: `${deviceId}-desc`,
+            instanceOf: 'urn:f9va_utuf:modelDefinition:_xpulqjczp',
             simulated: true,
             approved: true
         };
         const apiSimDevice = await setDevice(simDevice);
         console.log(apiSimDevice);
 
-        const iothubClient = await registerDevice(deviceId);
-        iothubClient.emit(deviceId, 'values');
+        // const iothubClient = await registerDevice(deviceId);
+        // iothubClient.emit(deviceId, 'values');
 
         res.status(200).json({
-            deviceId
+            apiSimDevice
         });
     } catch (e) {
         const error = {
@@ -44,6 +39,9 @@ export async function createDevice(req: express.Request, res: express.Response) 
 }
 
 async function registerDevice(deviceId: string): Promise<Client> {
+    // Only works for Cloud First
+    // const deviceId = 'zz-web';
+
     const dpsTransport = new DPSMqtt();
     const securityClient = new SymmetricKeySecurityClient(deviceId, key);
     const dpsClient = ProvisioningDeviceClient.create(host, scopeId, dpsTransport, securityClient);
@@ -72,12 +70,13 @@ async function registerDevice(deviceId: string): Promise<Client> {
 
 async function setDevice(device: Device): Promise<Device> {
     const url = `https://wechat.azureiotcentral.com/api/preview/devices/${device.id}`;
-    const body = {
+    const body = JSON.stringify({
         displayName: device.displayName,
+        // description: device.description,
         instanceOf: device.instanceOf,
         simulated: device.simulated,
         approved: device.approved
-    };
+    });
     const options = {
         headers: {
             'content-type': 'application/json',
@@ -93,7 +92,6 @@ async function getDevice(deviceId: string): Promise<Device> {
     const url = `https://wechat.azureiotcentral.com/api/preview/devices/${deviceId}`;
     const options = {
         headers: {
-            'content-type': 'application/json',
             authorization: token
         },
         method: 'GET'
