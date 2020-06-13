@@ -9,9 +9,6 @@ import { Device } from '../common/types';
 
 const host = 'global.azure-devices-provisioning.net';
 // const deviceId = 'zz-web';
-const scopeId = '0ne00117F1D';
-const key = '71Wfq2m3YhXOSm+pWJM57Ud+chaFqP7kz2/8G7y0QHQ=';
-const token = 'SharedAccessSignature sr=15bcff61-a3dc-448d-a764-7d7432274fc7&sig=kYilfYeTk5EgOT1DWFbcxQeOOnOlJJDNjbvT7Z1F3Ho%3D&skn=zz&se=1623556621687';
 
 export async function createDevice(req: express.Request, res: express.Response) {
     try {
