@@ -1,25 +1,16 @@
 import { fetchResult } from '../common/util';
-import { Users, TokenResponse } from '../common/types';
+import { Users, TokenResponse, User } from '../common/types';
 import { renewAccessToken } from './tokenService';
-import * as express from 'express';
+import { upsertEntity, deleteEntity } from './tableService';
 
 let accessToken: TokenResponse = {
     access_token: '',
     expires_in: 0
 };
 
-export async function listUsers(req: express.Request, res: express.Response) {
-    try {
-        accessToken = await renewAccessToken(accessToken);
-        const users = await listUsersInternal(accessToken.access_token);
-        res.status(200).json(users);
-    } catch (e) {
-        const error = {
-            code: 400,
-            message: e.message
-        };
-        res.status(400).json({ error });
-    }
+export async function listUsers(): Promise<Users> {
+    accessToken = await renewAccessToken(accessToken);
+    return await listUsersInternal(accessToken.access_token);
 }
 
 async function listUsersInternal(accessToken: string): Promise<Users> {
@@ -33,30 +24,18 @@ async function listUsersInternal(accessToken: string): Promise<Users> {
     return await fetchResult<Users>(url, options);
 }
 
-export async function upsertUser(req: express.Request, res: express.Response) {
-    try {
-        res.status(200).json({
-            user: 'upsert'
-        });
-    } catch (e) {
-        const error = {
-            code: 400,
-            message: e.message
-        };
-        res.status(400).json({ error });
-    }
+export async function upsertUser(user: User): Promise<any> {
+    const entity = await upsertEntity(user);
+    return entity;
 }
 
-export async function deleteUser(req: express.Request, res: express.Response) {
-    try {
-        res.status(200).json({
-            user: 'deleted'
-        });
-    } catch (e) {
-        const error = {
-            code: 400,
-            message: e.message
-        };
-        res.status(400).json({ error });
-    }
+export async function deleteUser(userId: string): Promise<User> {
+    const user: User = {
+        id: userId,
+        name: '',
+        openid: '',
+        avatarUrl: ''
+    };
+    const entity = await deleteEntity(user);
+    return entity;
 }
