@@ -33,4 +33,30 @@ async function listUsersInternal(accessToken: string): Promise<Users> {
     return await fetchResult<Users>(url, options);
 }
 
+export async function upsertUser(req: express.Request, res: express.Response) {
+    try {
+        res.status(200).json({
+            user: 'upsert'
+        });
+    } catch (e) {
+        const error = {
+            code: 400,
+            message: e.message
+        };
+        res.status(400).json({ error });
+    }
+}
 
+export async function deleteUser(req: express.Request, res: express.Response) {
+    try {
+        res.status(200).json({
+            user: 'deleted'
+        });
+    } catch (e) {
+        const error = {
+            code: 400,
+            message: e.message
+        };
+        res.status(400).json({ error });
+    }
+}

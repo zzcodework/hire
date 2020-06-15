@@ -35,3 +35,10 @@ export interface Application {
     subdomain: string;
     displayName: string;
 }
+
+export interface User {
+    id: string;
+    name: string;
+    openid: string;
+    avatarUrl: string;
+}
