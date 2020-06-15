@@ -7,6 +7,7 @@ export const appSecret = '';
 export const scopeId = '';
 export const key = '';
 export const token = '';
+export const usersTableConnectionString = '';
 
 // TEST
 // export const appId = 'wx40f8c75254235242';
