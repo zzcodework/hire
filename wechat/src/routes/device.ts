@@ -7,8 +7,10 @@ export const deviceRouter = express.Router();
 deviceRouter.use('/:deviceId', async (req, res) => {
     try {
         const deviceId = req.params.deviceId as string || shortid.generate();
-        // const device = await createDeviceByApi(deviceId);
-        const device = await createDeviceByDps(deviceId);
+        const deviceMode = req.query.mode;
+        const device = deviceMode
+            ? await createDeviceByDps(deviceId)
+            : await createDeviceByApi(deviceId);
         res.status(200).json({ device });
     } catch (e) {
         const error = {

@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { Client } from 'azure-iot-device';
+import { Client, Message } from 'azure-iot-device';
 import { Mqtt as IoTHubMqtt } from 'azure-iot-device-mqtt';
 import { ProvisioningDeviceClient } from 'azure-iot-provisioning-device';
 import { SymmetricKeySecurityClient } from 'azure-iot-security-symmetric-key';
@@ -7,13 +7,39 @@ import { Mqtt as DPSMqtt } from 'azure-iot-provisioning-device-mqtt';
 import { fetchResult, computeDrivedSymmetricKey } from '../common/util';
 import { Device } from '../common/types';
 import { host, scopeId, apiToken, primaryKey } from '../common/constant';
+import { ProvisioningPayload } from 'azure-iot-provisioning-device/lib/interfaces';
+
+const mxchip = {
+    id: 'urn:zsoh1tlv4:modelDefinition:ffb3edxcxe',
+    capabilityModelId: 'urn:mxchip:mxchip_iot_devkit:1',
+    solutionModelId: 'urn:zsoh1tlv4:modelDefinition:oq0nfgehsv'
+};
+
+const phone = {
+    id: 'urn:f9va_utuf:modelDefinition:_xpulqjczp',
+    capabilityModelId: 'urn:mxchip:mxchip_iot_devkit:1',
+    solutionModelId: 'urn:zsoh1tlv4:modelDefinition:oq0nfgehsv'
+};
+
+const modelPayload = {
+    types: {
+        m2: {
+            iotcModelId: mxchip.capabilityModelId
+        },
+        m3: {
+            '__iot:interfaces': {
+                CapabilityModelId: mxchip.capabilityModelId
+            }
+        }
+    }
+};
 
 export async function createDeviceByApi(deviceId: string, simulated = true): Promise<Device> {
     const simDevice: Device = {
         id: deviceId,
-        displayName: `${deviceId}-sim`,
+        displayName: `${deviceId}-${simulated ? 'sim' : 'real'}`,
         description: `${deviceId}-desc`,
-        instanceOf: 'urn:f9va_utuf:modelDefinition:_xpulqjczp',
+        instanceOf: phone.id,
         simulated,
         approved: true
     };
@@ -32,6 +58,8 @@ async function registerDevice(deviceId: string): Promise<Client> {
     const dpsTransport = new DPSMqtt();
     const securityClient = new SymmetricKeySecurityClient(deviceId, key);
     const dpsClient = ProvisioningDeviceClient.create(host, scopeId, dpsTransport, securityClient);
+    const payload: ProvisioningPayload = modelPayload.types.m3;
+    dpsClient.setProvisioningPayload(payload);
 
     return new Promise((resolve, reject) => {
         dpsClient.register((err, result) => {
@@ -47,11 +75,25 @@ async function registerDevice(deviceId: string): Promise<Client> {
                         console.log('Open IoTHub client failed.');
                         reject(err);
                     } else {
+                        setInterval(() => {
+                            sendMessage(iothubClient);
+                        },
+                            3 * 1000);
                         resolve(iothubClient);
                     }
                 });
             }
         });
+    });
+}
+
+function sendMessage(iothubClient: Client) {
+    const message = new Message('this is just a test message');
+    iothubClient.sendEvent(message, (err, res) => {
+        if (err) {
+            console.error(err);
+        }
+        console.log(res);
     });
 }
 
