@@ -6,7 +6,7 @@ import { SymmetricKeySecurityClient } from 'azure-iot-security-symmetric-key';
 import { Mqtt as DPSMqtt } from 'azure-iot-provisioning-device-mqtt';
 import { fetchResult, computeDrivedSymmetricKey } from '../common/util';
 import { Device } from '../common/types';
-import { host, scopeId, apiToken, primaryKey } from '../common/constant';
+import { scopeId, apiToken, primaryKey } from '../common/constant';
 import { ProvisioningPayload } from 'azure-iot-provisioning-device/lib/interfaces';
 
 const mxchip = {
@@ -54,6 +54,7 @@ export async function createDeviceByDps(deviceId: string): Promise<void> {
 }
 
 async function registerDevice(deviceId: string): Promise<Client> {
+    const host = 'global.azure-devices-provisioning.net';
     const key = computeDrivedSymmetricKey(primaryKey, deviceId);
     const dpsTransport = new DPSMqtt();
     const securityClient = new SymmetricKeySecurityClient(deviceId, key);

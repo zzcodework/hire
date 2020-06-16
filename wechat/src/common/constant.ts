@@ -1,12 +1,12 @@
-// Public
-export const host = 'global.azure-devices-provisioning.net';
-
 // PROD
+// wechat
 export const appId = '';
 export const appSecret = '';
+// DPS
 export const scopeId = '';
-export const key = '';
-export const token = '';
+export const primaryKey = '';
+// App
+export const apiToken = '';
 export const usersTableConnectionString = '';
 
 // TEST
