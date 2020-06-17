@@ -23,7 +23,13 @@ userRouter.put('/:userId', async (req, res) => {
             id: req.params.userId,
             name: req.body.name,
             openid: req.body.openid,
-            avatarUrl: req.body.avatarUrl
+            avatarUrl: req.body.avatarUrl,
+            city: req.body.city,
+            country: req.body.country,
+            gender: req.body.gender,
+            language: req.body.language,
+            nickName: req.body.nickName,
+            province: req.body.province
         };
         const result = await upsertUser(user);
         res.status(200).json({ result });

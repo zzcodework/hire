@@ -15,7 +15,13 @@ export async function upsertEntity(user: User): Promise<any> {
             RowKey: entGen.String(user.id),
             name: entGen.String(user.name),
             openId: entGen.String(user.openid),
-            avatarUrl: entGen.String(user.avatarUrl)
+            avatarUrl: entGen.String(user.avatarUrl),
+            city: entGen.String(user.city),
+            country: entGen.String(user.country),
+            gender: entGen.Int32(user.gender),
+            language: entGen.String(user.language),
+            nickName: entGen.String(user.nickName),
+            province: entGen.String(user.province)
         };
 
         tableService.insertOrReplaceEntity(tableName, entity, (error, result, response) => {
