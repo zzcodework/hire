@@ -1,7 +1,7 @@
 import * as storage from 'azure-storage';
 import { User } from '../common/types';
-import * as express from 'express';
 import { usersTableConnectionString } from '../common/constant';
+import { TableQuery } from 'azure-storage';
 
 const tableName = 'wechat';
 
@@ -14,7 +14,7 @@ export async function upsertEntity(user: User): Promise<any> {
             PartitionKey: entGen.String(user.id),
             RowKey: entGen.String(user.id),
             name: entGen.String(user.name),
-            openId: entGen.String(user.openid),
+            openid: entGen.String(user.openid),
             avatarUrl: entGen.String(user.avatarUrl),
             city: entGen.String(user.city),
             country: entGen.String(user.country),
@@ -47,6 +47,21 @@ export async function deleteEntity(userId: string): Promise<string> {
                 reject(err);
             }
             resolve(userId);
+        });
+    });
+}
+
+export async function getEntity(userId: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+        const tableService = storage.createTableService(usersTableConnectionString);
+        const query = new TableQuery().top(1).where('openid eq ?', userId);
+        tableService.queryEntities(tableName, query, null, (err, results) => {
+            if (err) {
+                console.error(err);
+                reject(err);
+            }
+            console.log(results);
+            resolve(results);
         });
     });
 }
