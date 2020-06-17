@@ -28,26 +28,19 @@ export async function upsertEntity(user: User): Promise<any> {
     });
 }
 
-export async function deleteEntity(user: User): Promise<User> {
-    const tableService = storage.createTableService();
-    const entGen = storage.TableUtilities.entityGenerator;
-
-    const entity = {
-        PartitionKey: entGen.String('part2'),
-        RowKey: entGen.String('row1'),
-        taskDone: entGen.Boolean(true),
-    };
-
-    tableService.insertOrReplaceEntity(tableName, entity, (error, result, response) => {
-        if (!error) {
-            // result contains the entity with field 'taskDone' set to `true`
-        }
+export async function deleteEntity(userId: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+        const tableService = storage.createTableService(usersTableConnectionString);
+        const descriptor = {
+            PartitionKey: userId,
+            RowKey: userId
+        };
+        tableService.deleteEntity(tableName, descriptor, err => {
+            if (err) {
+                console.error(err);
+                reject(err);
+            }
+            resolve(userId);
+        });
     });
-
-    return {
-        id: 'zz',
-        name: 'zz-name',
-        openid: 'zz-openid',
-        avatarUrl: ''
-    };
 }

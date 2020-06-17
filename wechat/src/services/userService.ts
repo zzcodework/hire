@@ -29,13 +29,6 @@ export async function upsertUser(user: User): Promise<any> {
     return entity;
 }
 
-export async function deleteUser(userId: string): Promise<User> {
-    const user: User = {
-        id: userId,
-        name: '',
-        openid: '',
-        avatarUrl: ''
-    };
-    const entity = await deleteEntity(user);
-    return entity;
+export async function deleteUser(userId: string): Promise<string> {
+    return await deleteEntity(userId);
 }
