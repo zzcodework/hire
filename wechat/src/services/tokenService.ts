@@ -9,6 +9,7 @@ export async function renewAccessToken(token: TokenResponse): Promise<TokenRespo
         || token.access_token === ''
         || token.expires_in - now < delta) {
         token = await getAccessToken();
+        console.log(`Regenerated access token: ${token}`);
     }
     return token;
 }

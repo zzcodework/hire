@@ -29,6 +29,7 @@ openidRouter.post('/decrypt', async (req, res) => {
         const sessionKey = req.body.sessionKey;
         const ivKey = req.body.ivKey;
         const result = decryptData(encryptedData, appId, sessionKey, ivKey);
+        console.log(result);
         res.status(200).json(result);
     } catch (e) {
         const error = {
