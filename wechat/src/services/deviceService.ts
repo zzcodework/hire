@@ -118,7 +118,7 @@ async function setDevice(device: Device): Promise<Device> {
     return await fetchResult<Device>(url, options);
 }
 
-async function getDevice(deviceId: string): Promise<Device> {
+export async function getDevice(deviceId: string): Promise<Device> {
     const url = `https://wechat.azureiotcentral.com/api/preview/devices/${deviceId}`;
     const options = {
         headers: {
@@ -126,5 +126,7 @@ async function getDevice(deviceId: string): Promise<Device> {
         },
         method: 'GET'
     };
-    return await fetchResult<Device>(url, options);
+    const device = await fetchResult<Device>(url, options);
+    console.log(device);
+    return device;
 }
