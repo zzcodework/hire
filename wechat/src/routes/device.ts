@@ -21,10 +21,11 @@ deviceRouter.get('/:deviceId', async (req, res) => {
 deviceRouter.put('/:deviceId', async (req, res) => {
     try {
         const deviceId = req.params.deviceId || shortid.generate();
+        const displayName = req.body.displayName;
         const deviceMode = req.query.mode;
         const device = deviceMode
             ? await createDeviceByDps(deviceId)
-            : await createDeviceByApi(deviceId);
+            : await createDeviceByApi(deviceId, displayName);
         res.status(200).json({ device });
     } catch (e) {
         const error = {

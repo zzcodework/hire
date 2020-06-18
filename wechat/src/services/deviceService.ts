@@ -34,10 +34,10 @@ const modelPayload = {
     }
 };
 
-export async function createDeviceByApi(deviceId: string, simulated = true): Promise<Device> {
+export async function createDeviceByApi(deviceId: string, displayName?: string, simulated = true): Promise<Device> {
     const simDevice: Device = {
         id: deviceId,
-        displayName: `${deviceId}-${simulated ? 'sim' : 'real'}`,
+        displayName: displayName || `${deviceId}-${simulated ? 'sim' : 'real'}`,
         description: `${deviceId}-desc`,
         instanceOf: phone.id,
         simulated,
