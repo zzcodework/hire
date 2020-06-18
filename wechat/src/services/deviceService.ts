@@ -1,11 +1,10 @@
-import * as express from 'express';
 import { Client, Message } from 'azure-iot-device';
 import { Mqtt as IoTHubMqtt } from 'azure-iot-device-mqtt';
 import { ProvisioningDeviceClient } from 'azure-iot-provisioning-device';
 import { SymmetricKeySecurityClient } from 'azure-iot-security-symmetric-key';
 import { Mqtt as DPSMqtt } from 'azure-iot-provisioning-device-mqtt';
 import { fetchResult, computeDrivedSymmetricKey } from '../common/util';
-import { Device } from '../common/types';
+import { Device, DeviceProperties } from '../common/types';
 import { scopeId, apiToken, primaryKey } from '../common/constant';
 import { ProvisioningPayload } from 'azure-iot-provisioning-device/lib/interfaces';
 
@@ -126,7 +125,65 @@ export async function getDevice(deviceId: string): Promise<Device> {
         },
         method: 'GET'
     };
-    const device = await fetchResult<Device>(url, options);
-    console.log(device);
-    return device;
+    return await fetchResult<Device>(url, options);
+}
+
+export async function updateDeviceProperties(properties: DeviceProperties): Promise<DeviceProperties> {
+    const url = `https://wechat.azureiotcentral.com/api/preview/devices/${properties.id}/properties`;
+    const body = JSON.stringify({
+        phone_info: {
+            name: properties.name,
+            image: properties.image,
+            manufacturer: properties.manufacturer
+        }
+    });
+    console.log(body);
+    const options = {
+        headers: {
+            authorization: apiToken
+        },
+        method: 'PUT',
+        body
+    };
+    return await fetchResult<DeviceProperties>(url, options);
+}
+
+export async function getDeviceProperties(deviceId: string): Promise<DeviceProperties> {
+    const url = `https://wechat.azureiotcentral.com/api/preview/devices/${deviceId}/properties`;
+    const options = {
+        headers: {
+            authorization: apiToken
+        },
+        method: 'GET'
+    };
+    return await fetchResult<DeviceProperties>(url, options);
+}
+
+export async function updateDeviceComponentProperties(properties: DeviceProperties): Promise<DeviceProperties> {
+    const url = `https://wechat.azureiotcentral.com/api/preview/devices/${properties.id}/components/${properties.componentName}/properties`;
+    const body = JSON.stringify({
+        name: properties.name,
+        image: properties.image,
+        manufacturer: properties.manufacturer
+    });
+    console.log(body);
+    const options = {
+        headers: {
+            authorization: apiToken
+        },
+        method: 'PUT',
+        body
+    };
+    return await fetchResult<DeviceProperties>(url, options);
+}
+
+export async function getDeviceComponentProperties(deviceId: string, componentName: string): Promise<DeviceProperties> {
+    const url = `https://wechat.azureiotcentral.com/api/preview/devices/${deviceId}/components/${componentName}/properties`;
+    const options = {
+        headers: {
+            authorization: apiToken
+        },
+        method: 'GET'
+    };
+    return await fetchResult<DeviceProperties>(url, options);
 }

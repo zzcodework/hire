@@ -29,6 +29,14 @@ export interface Device {
     etag?: string;
 }
 
+export interface DeviceProperties {
+    componentName?: string;
+    manufacturer: string;
+    id: string;
+    name: string;
+    image: string;
+}
+
 export interface Application {
     id: string;
     host?: string;

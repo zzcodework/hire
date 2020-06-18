@@ -46,7 +46,7 @@ userRouter.put('/:userId', async (req, res) => {
             province: req.body.province
         };
         const result = await upsertUser(user);
-        res.status(200).json({ result });
+        res.status(200).json(result);
     } catch (e) {
         const error = {
             code: 400,
@@ -60,7 +60,7 @@ userRouter.delete('/:userId', async (req, res) => {
     try {
         const userId = req.params.userId;
         const user = await deleteUser(userId);
-        res.status(200).json({ user });
+        res.status(200).json(user);
     } catch (e) {
         const error = {
             code: 400,
